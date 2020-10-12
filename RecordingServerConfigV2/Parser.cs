@@ -38,6 +38,7 @@ namespace RecordingServerConfigV2
             // RS
             rsProps.id = xDoc.SelectSingleNode("/recorderconfig/recorder/id").InnerText;
             rsProps.displayName = xDoc.SelectSingleNode("/recorderconfig/recorder/displayname").InnerText;
+
             rsProps.rsWebApiPort = xDoc.SelectSingleNode("/recorderconfig/webapi/port").InnerText;
 
             rsProps.rsWebApiAddress = xDoc.SelectSingleNode("/recorderconfig/webapi/publicUri").InnerText;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecordingServerConfigV2
 {
-    class RecorderProperties
+    internal class RecorderProperties
     {
 
         public String file { get; set; }

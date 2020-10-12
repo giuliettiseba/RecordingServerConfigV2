@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -11,17 +12,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace RecordingServerConfigV2
 {
-    class TestsHelper
+    internal class TestsHelper
     {
-
-
-
 
         internal string CheckEndPoint(string port)
         {
-
             IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
             IPEndPoint[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpListeners();
             foreach (IPEndPoint tcpi in tcpConnInfoArray)
@@ -31,36 +29,31 @@ namespace RecordingServerConfigV2
                     return "Edpoint found at port: " + port;
                 }
             }
-
             return "No endpoint found at port: " + port;
-
-
         }
 
-        internal bool EstablishedConections(string port)
+        internal string[] GetDate(string msWebApiAddress)
         {
-
-            bool isAvailable = true;
-            // Evaluate current system tcp connections. This is the same information provided
-            // by the netstat command line application, just in .Net strongly-typed object
-            // form.  We will look through the list, and if our port we would like to use
-            // in our TcpClient is occupied, we will set isAvailable to false.
-
-            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
-
-            foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
+            try
             {
-                if (tcpi.LocalEndPoint.Port == int.Parse(port))
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + msWebApiAddress);
+                request.Date = DateTime.Now;
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    isAvailable = false;
-                    break;
+                    string[] ret = { request.Headers.Get("Date"), response.Headers.Get("Date") };
+                    return ret;
                 }
+
             }
-
-            return isAvailable;
-
-
+            catch (Exception e)
+            {
+                string[] ret = { e.Message, e.Message};
+                return ret;
+            }
+            
         }
 
         internal String CheckPort(string ip, string port)
@@ -83,76 +76,92 @@ namespace RecordingServerConfigV2
 
 
 
+        private static readonly HttpClient client = new HttpClient();
 
-
-
-
-
-        internal string ReadHTTP(string authorizationServerAddress)
+        internal async Task<List<KeyValuePair<String, String>>> ReadIDPResponseAsync(string authorizationServerAddress)
         {
-            HttpWebRequest request = WebRequest.Create(authorizationServerAddress) as HttpWebRequest;
+            List<KeyValuePair<String, String>> output = new List<KeyValuePair<string, string>>();
 
 
             try
             {
-                //request.Accept = "application/xrds+xml";  
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                var response = await client.GetStringAsync(authorizationServerAddress + "/.well-known/openid-configuration");
 
-                WebHeaderCollection header = response.Headers;
+                IDPresponse openidConfiguration = JsonConvert.DeserializeObject<IDPresponse>(response);
+                var response2 = await client.GetStringAsync(authorizationServerAddress + "/.well-known/openid-configuration/jwks");
+                JwksRoot jwks = JsonConvert.DeserializeObject<JwksRoot>(response2);
 
-                var encoding = ASCIIEncoding.ASCII;
-                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
-                {
-                    string responseText = reader.ReadToEnd();
-                    return header + " - " + responseText;
-                }
-
-            }
-            catch (Exception r)
-            {
-                return r.Message;
-            }
-        }
-
-
-
+                output.Add(new KeyValuePair<String, String>("IDP Server", openidConfiguration.issuer));
+                output.Add(new KeyValuePair<String, String>("jwks_uri", openidConfiguration.jwks_uri));
+                output.Add(new KeyValuePair<String, String>("authorization_endpoint", openidConfiguration.authorization_endpoint));
+                output.Add(new KeyValuePair<String, String>("token_endpoint", openidConfiguration.token_endpoint));
+                output.Add(new KeyValuePair<String, String>("userinfo_endpoint", openidConfiguration.userinfo_endpoint));
+                output.Add(new KeyValuePair<String, String>("end_session_endpoint", openidConfiguration.end_session_endpoint));
+                output.Add(new KeyValuePair<String, String>("check_session_iframe", openidConfiguration.check_session_iframe));
+                output.Add(new KeyValuePair<String, String>("revocation_endpoint", openidConfiguration.revocation_endpoint));
+                output.Add(new KeyValuePair<String, String>("introspection_endpoint", openidConfiguration.introspection_endpoint));
+                output.Add(new KeyValuePair<String, String>("frontchannel_logout_supported", openidConfiguration.frontchannel_logout_supported.ToString()));
+                output.Add(new KeyValuePair<String, String>("frontchannel_logout_session_supported", openidConfiguration.frontchannel_logout_session_supported.ToString()));
+                output.Add(new KeyValuePair<String, String>("backchannel_logout_supported", openidConfiguration.backchannel_logout_supported.ToString()));
+                output.Add(new KeyValuePair<String, String>("backchannel_logout_session_supported", openidConfiguration.backchannel_logout_session_supported.ToString()));
 
 
 
-
-
-
-        internal string ReadIDPResponse(string authorizationServerAddress)
-        {
-
-            /// Just seek the 401, nothing else. 
-            /// Kestrel Web Server. 
-            authorizationServerAddress += "/connect/token";
-            try
-            {
-                using (WebClient client = new WebClient())
-                {
-                    System.Collections.Specialized.NameValueCollection postData =
-                        new System.Collections.Specialized.NameValueCollection()
-                       {
-              { "grant_type",  "windows_auth"},
-              { "scope", "write:client" },
-              { "client_id", "winauthclient" }
-                       };
-                    Encoding.UTF8.GetString(client.UploadValues(authorizationServerAddress, postData));
-                }
-                return "";
             }
             catch (Exception e)
             {
-                if (e.Message == "The remote server returned an error: (401) Unauthorized.")
-                    return "IDP server online";
-                else
-
-                    return e.Message;
+                output.Add(new KeyValuePair<String, String>("IDP Server: ", e.Message));
             }
+
+            return output;
 
 
         }
+
+
+        public class IDPresponse
+        {
+            public string issuer { get; set; }
+            public string jwks_uri { get; set; }
+            public string authorization_endpoint { get; set; }
+            public string token_endpoint { get; set; }
+            public string userinfo_endpoint { get; set; }
+            public string end_session_endpoint { get; set; }
+            public string check_session_iframe { get; set; }
+            public string revocation_endpoint { get; set; }
+            public string introspection_endpoint { get; set; }
+            public bool frontchannel_logout_supported { get; set; }
+            public bool frontchannel_logout_session_supported { get; set; }
+            public bool backchannel_logout_supported { get; set; }
+            public bool backchannel_logout_session_supported { get; set; }
+            public List<string> scopes_supported { get; set; }
+            public List<object> claims_supported { get; set; }
+            public List<string> grant_types_supported { get; set; }
+            public List<string> response_types_supported { get; set; }
+            public List<string> response_modes_supported { get; set; }
+            public List<string> token_endpoint_auth_methods_supported { get; set; }
+            public List<string> subject_types_supported { get; set; }
+            public List<string> id_token_signing_alg_values_supported { get; set; }
+            public List<string> code_challenge_methods_supported { get; set; }
+        }
+
+
+        // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+        public class JwksKey
+        {
+            public string kty { get; set; }
+            public string use { get; set; }
+            public string kid { get; set; }
+            public string e { get; set; }
+            public string n { get; set; }
+            public string alg { get; set; }
+        }
+
+        public class JwksRoot
+        {
+            public List<JwksKey> keys { get; set; }
+        }
     }
+
 }
+

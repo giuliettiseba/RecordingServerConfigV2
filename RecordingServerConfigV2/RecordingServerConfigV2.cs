@@ -324,31 +324,29 @@ namespace RecordingServerConfigV2
             // instance properties Class 
             rsProps = new RecorderProperties();
 
-            // Read Values from XML
-            parser.ReadValues(rsProps);
+            try
+            {
+                // Read Values from XML
+                parser.ReadValues(rsProps);
+
+            }
+            catch (Exception e)
+            {
+                if (e.Message == "Object reference not set to an instance of an object.") MessageBox.Show("Versions below 13.2 are not supported by RecorderConfigV2. Please use recorderconfigmanager");
+                else MessageBox.Show(e.Message);
+            }            
 
             // Show Values in the GUI
             showValues(rsProps);
         }
 
-        private void buttonTestManagementServer_Click(object sender, EventArgs e)
+        private async void buttonTestManagementServer_ClickAsync(object sender, EventArgs e)
         {
-
             fetchValues(rsProps);
 
-
-            MessageBox.Show(testHelper.CheckPort(rsProps.msWebApiAddress, rsProps.msWebApiPort));
-
-
-            MessageBox.Show(testHelper.ReadIDPResponse(rsProps.authorizationServerAddress));
-            
-
-
-
-            
-            /// Test name resolution if the case and port 
-            /// Test IDP 
-
+            MS_Tester mS_Tester = new MS_Tester(testHelper, rsProps);
+            mS_Tester.Show();
+            await mS_Tester.StartTestsAsync();
 
         }
 
@@ -356,11 +354,11 @@ namespace RecordingServerConfigV2
         {
             fetchValues(rsProps);
 
-            MessageBox.Show(testHelper.CheckEndPoint(rsProps.rsWebServerPort));
+            RS_Tester rS_Tester = new RS_Tester(testHelper, rsProps);
+            rS_Tester.Show();
+            rS_Tester.StartTests();
 
-            MessageBox.Show(testHelper.CheckEndPoint(rsProps.rsWebApiPort));
 
-     
         }
 
         private void fetchValues_Action(object sender, EventArgs e)

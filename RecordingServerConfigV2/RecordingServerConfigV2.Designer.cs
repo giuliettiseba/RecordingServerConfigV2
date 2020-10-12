@@ -31,7 +31,7 @@
             this.ButtonSave = new System.Windows.Forms.Button();
             this.buttonReloadConfig = new System.Windows.Forms.Button();
             this.buttonDefaulValues = new System.Windows.Forms.Button();
-            this.buttonOptimusValues = new System.Windows.Forms.Button();
+            this.buttonOptimumValues = new System.Windows.Forms.Button();
             this.buttonExtremeValues = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonTestRecordingServer = new System.Windows.Forms.Button();
@@ -132,15 +132,15 @@
             this.buttonDefaulValues.UseVisualStyleBackColor = true;
             this.buttonDefaulValues.Click += new System.EventHandler(this.buttonDefaulValues_Click);
             // 
-            // buttonOptimusValues
+            // buttonOptimumValues
             // 
-            this.buttonOptimusValues.Location = new System.Drawing.Point(135, 579);
-            this.buttonOptimusValues.Name = "buttonOptimusValues";
-            this.buttonOptimusValues.Size = new System.Drawing.Size(95, 23);
-            this.buttonOptimusValues.TabIndex = 2;
-            this.buttonOptimusValues.Text = "Optimus Values";
-            this.buttonOptimusValues.UseVisualStyleBackColor = true;
-            this.buttonOptimusValues.Click += new System.EventHandler(this.buttonOptimusValues_Click);
+            this.buttonOptimumValues.Location = new System.Drawing.Point(135, 579);
+            this.buttonOptimumValues.Name = "buttonOptimumValues";
+            this.buttonOptimumValues.Size = new System.Drawing.Size(95, 23);
+            this.buttonOptimumValues.TabIndex = 2;
+            this.buttonOptimumValues.Text = "Optimum Values";
+            this.buttonOptimumValues.UseVisualStyleBackColor = true;
+            this.buttonOptimumValues.Click += new System.EventHandler(this.buttonOptimusValues_Click);
             // 
             // buttonExtremeValues
             // 
@@ -252,6 +252,7 @@
             // 
             this.textBox_displayname.Location = new System.Drawing.Point(121, 41);
             this.textBox_displayname.Name = "textBox_displayname";
+            this.textBox_displayname.ReadOnly = true;
             this.textBox_displayname.Size = new System.Drawing.Size(178, 20);
             this.textBox_displayname.TabIndex = 17;
             // 
@@ -304,7 +305,7 @@
             this.buttonTestManagementServer.TabIndex = 12;
             this.buttonTestManagementServer.Text = "Test";
             this.buttonTestManagementServer.UseVisualStyleBackColor = true;
-            this.buttonTestManagementServer.Click += new System.EventHandler(this.buttonTestManagementServer_Click);
+            this.buttonTestManagementServer.Click += new System.EventHandler(this.buttonTestManagementServer_ClickAsync);
             // 
             // textBoxAuthorizationserveraddress
             // 
@@ -712,7 +713,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonExtremeValues);
-            this.Controls.Add(this.buttonOptimusValues);
+            this.Controls.Add(this.buttonOptimumValues);
             this.Controls.Add(this.buttonDefaulValues);
             this.Controls.Add(this.buttonReloadConfig);
             this.Controls.Add(this.ButtonSave);
@@ -740,7 +741,7 @@
         private System.Windows.Forms.Button ButtonSave;
         private System.Windows.Forms.Button buttonReloadConfig;
         private System.Windows.Forms.Button buttonDefaulValues;
-        private System.Windows.Forms.Button buttonOptimusValues;
+        private System.Windows.Forms.Button buttonOptimumValues;
         private System.Windows.Forms.Button buttonExtremeValues;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBoxRecordingServerWebServerPort;
