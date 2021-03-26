@@ -21,17 +21,17 @@ namespace RecordingServerConfigV2
             this.rsProps = rsProps;
             InitializeComponent();
         }
-        internal void StartTests()
+        internal async void StartTests()
         {
             /// Test WebServerPort 
-            string webServerPort = testHelper.CheckPort(rsProps.rsWebServerAddress, rsProps.rsWebServerPort);
+            string webServerPort = await testHelper.CheckPortAsync(rsProps.rsWebServerAddress, rsProps.rsWebServerPort);
             int row = dataGridViewResults.Rows.Add("Web Server: ", webServerPort);
             if (webServerPort.Contains("Endpoint found at IP:")) dataGridViewResults.Rows[row].DefaultCellStyle.BackColor = Color.Green;
             else dataGridViewResults.Rows[row].DefaultCellStyle.BackColor = Color.Red; // If time dif > 5 mins
 
 
             /// Test WebApiPort 
-            string webApiPort = testHelper.CheckPort(rsProps.rsWebApiAddress, rsProps.rsWebApiPort);
+            string webApiPort = await testHelper.CheckPortAsync(rsProps.rsWebApiAddress, rsProps.rsWebApiPort);
             row = dataGridViewResults.Rows.Add("Web API Server: ", webApiPort);
             if (webApiPort.Contains("Endpoint found at IP:")) dataGridViewResults.Rows[row].DefaultCellStyle.BackColor = Color.Green;
             else dataGridViewResults.Rows[row].DefaultCellStyle.BackColor = Color.Red; // If time dif > 5 mins

@@ -222,6 +222,7 @@
             this.textBoxRecordingServerWebApiPort.Name = "textBoxRecordingServerWebApiPort";
             this.textBoxRecordingServerWebApiPort.Size = new System.Drawing.Size(178, 20);
             this.textBoxRecordingServerWebApiPort.TabIndex = 21;
+            this.textBoxRecordingServerWebApiPort.TextChanged += new System.EventHandler(this.textBoxRecordingServerWebApiPort_TextChanged);
             // 
             // label9
             // 

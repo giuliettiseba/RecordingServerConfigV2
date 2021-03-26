@@ -46,24 +46,24 @@ namespace RecordingServerConfigV2
                     string[] ret = { request.Headers.Get("Date"), response.Headers.Get("Date") };
                     return ret;
                 }
-
             }
             catch (Exception e)
             {
-                string[] ret = { e.Message, e.Message};
+                string[] ret = { e.Message, e.Message };
                 return ret;
             }
-            
+
         }
 
-        internal String CheckPort(string ip, string port)
+        internal async Task<string> CheckPortAsync(string ip, string port)
         {
             using (TcpClient tcpClient = new TcpClient())
             {
                 try
                 {
-                    tcpClient.Connect(ip, int.Parse(port));
-                    return "Endpoint found at IP: " + ip + " Port: " + port;
+                    await tcpClient.ConnectAsync(ip, int.Parse(port));
+                    if (tcpClient.Connected) return "Endpoint found at IP: " + ip + " Port: " + port;
+                    else return "Timeout: " + ip + " Port: " + port;
                 }
                 catch (Exception e)
                 {

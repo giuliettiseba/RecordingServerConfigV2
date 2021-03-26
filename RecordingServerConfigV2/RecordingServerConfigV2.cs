@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
@@ -19,12 +21,13 @@ namespace RecordingServerConfigV2
         private Parser parser;
         private RecorderProperties rsProps;
         private TestsHelper testHelper;
+        private bool rs_web_api_port_changed;
+
         public RecordingServerConfigV2()
         {
             InitializeComponent();
 
-
-            // Initialize XML Parser 
+              // Initialize XML Parser 
             parser = new Parser();
 
             // Initialize TestHelper
@@ -83,6 +86,7 @@ namespace RecordingServerConfigV2
             textBoxForceArchiveLimit.Text = rsProps.forceArchiveLimit;
             textBoxForceDeleteLimit.Text = rsProps.forceDeleteLimit;
 
+            rs_web_api_port_changed = false;
 
         }
 
@@ -143,8 +147,11 @@ namespace RecordingServerConfigV2
             DialogResult dialogResult = MessageBox.Show("Warning: There will be no recordings or live video available until the Recording Server restrart is complete. Are you sure you want to continue?", "Restart required", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
+                string old_rsWebApiPort = rsProps.rsWebApiPort;
                 fetchValues(rsProps);
                 parser.WriteValues(rsProps);
+
+                if (rs_web_api_port_changed) ReservePort(old_rsWebApiPort, rsProps.rsWebApiPort); 
                 RestartService();
             }
             else if (dialogResult == DialogResult.No)
@@ -153,6 +160,34 @@ namespace RecordingServerConfigV2
             }
 
 
+
+        }
+
+        private void ReservePort(string old_rsWebApiPort, string rsWebApiPort)
+        {
+            { 
+            string address = "http://+:" + rsWebApiPort + "/";
+            string domain = "BUILTIN";
+            string user = "Administrators";
+            string args = string.Format(@"http add urlacl url={0} user={1}\{2}", address, domain, user);
+            ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
+            psi.Verb = "runas";
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = true;
+            Process.Start(psi).WaitForExit();
+            }
+
+            {
+                string address = "http://+:" + old_rsWebApiPort + "/";
+                string args = string.Format(@"http del urlacl url={0}", address);
+                ProcessStartInfo psi = new ProcessStartInfo("netsh", args);
+                psi.Verb = "runas";
+                psi.CreateNoWindow = true;
+                psi.WindowStyle = ProcessWindowStyle.Hidden;
+                psi.UseShellExecute = true;
+                Process.Start(psi).WaitForExit();
+            }
 
         }
 
@@ -321,6 +356,11 @@ namespace RecordingServerConfigV2
             parser.OpenFile();
 
 
+            // initialize rs_web_api_port watcher
+            rs_web_api_port_changed = false;
+
+
+
             // instance properties Class 
             rsProps = new RecorderProperties();
 
@@ -342,21 +382,39 @@ namespace RecordingServerConfigV2
 
         private async void buttonTestManagementServer_ClickAsync(object sender, EventArgs e)
         {
-            fetchValues(rsProps);
+            try
+            {
+                fetchValues(rsProps);
+                MS_Tester mS_Tester = new MS_Tester(testHelper, rsProps);
+                mS_Tester.Show();
+                await mS_Tester.StartTestsAsync();
 
-            MS_Tester mS_Tester = new MS_Tester(testHelper, rsProps);
-            mS_Tester.Show();
-            await mS_Tester.StartTestsAsync();
+            }
+            catch (Exception)
+            {
+
+                
+            }
 
         }
 
         private void buttonTestRecordingServer_Click(object sender, EventArgs e)
         {
-            fetchValues(rsProps);
+            try
+            {
+                fetchValues(rsProps);
 
-            RS_Tester rS_Tester = new RS_Tester(testHelper, rsProps);
-            rS_Tester.Show();
-            rS_Tester.StartTests();
+                RS_Tester rS_Tester = new RS_Tester(testHelper, rsProps);
+                rS_Tester.Show();
+                rS_Tester.StartTests();
+            }
+            catch (Exception)
+            {
+
+                
+            }
+
+           
 
 
         }
@@ -364,6 +422,11 @@ namespace RecordingServerConfigV2
         private void fetchValues_Action(object sender, EventArgs e)
         {
             fetchValues(rsProps);
+        }
+
+        private void textBoxRecordingServerWebApiPort_TextChanged(object sender, EventArgs e)
+        {
+            rs_web_api_port_changed = true;
         }
     }
 }
