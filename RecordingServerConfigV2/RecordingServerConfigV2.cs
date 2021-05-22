@@ -88,6 +88,12 @@ namespace RecordingServerConfigV2
 
             rs_web_api_port_changed = false;
 
+
+            //Proxy Split 
+
+            TextBoxmaxVideoStreamsPerProxy.Text = rsProps.maxVideoStreamsPerProxy;
+
+
         }
 
         /// <summary>
@@ -130,6 +136,10 @@ namespace RecordingServerConfigV2
             //Disk Usage Monitor
             rsProps.forceArchiveLimit = textBoxForceArchiveLimit.Text;
             rsProps.forceDeleteLimit = textBoxForceDeleteLimit.Text;
+
+
+            // Proxy Split 
+            rsProps.maxVideoStreamsPerProxy = TextBoxmaxVideoStreamsPerProxy.Text;
 
         }
 
@@ -413,10 +423,6 @@ namespace RecordingServerConfigV2
 
                 
             }
-
-           
-
-
         }
 
         private void fetchValues_Action(object sender, EventArgs e)
@@ -427,6 +433,15 @@ namespace RecordingServerConfigV2
         private void textBoxRecordingServerWebApiPort_TextChanged(object sender, EventArgs e)
         {
             rs_web_api_port_changed = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+                      MessageBox.Show("With the release of Device Pack 11.4, some drivers have the possibility to split the proxy of the driver if there are more than 100(by default) devices on the Recording Server using the same driver. \n \n" +
+                          "Not all the drivers in Device Pack 11.4 have this possibility enabled but our developers are constantly increasing the number of drivers that can do the proxy splitting.\n\n " +
+                          "This improvement can be helpful in cases where a particular proxy is using a lot of CPU-or RAM resources, the ProxySrv.exe is crashing frequently, or there appear some similar problems related to the ProxySrv.exe."
+           , "Proxy Split Help", MessageBoxButtons.OK, MessageBoxIcon.Question);
+
         }
     }
 }

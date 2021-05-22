@@ -92,6 +92,10 @@
             this.labelVersion = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.TextBoxmaxVideoStreamsPerProxy = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -99,12 +103,13 @@
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonSave
             // 
             this.ButtonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ButtonSave.Location = new System.Drawing.Point(521, 542);
+            this.ButtonSave.Location = new System.Drawing.Point(509, 579);
             this.ButtonSave.Name = "ButtonSave";
             this.ButtonSave.Size = new System.Drawing.Size(75, 23);
             this.ButtonSave.TabIndex = 2;
@@ -114,7 +119,7 @@
             // 
             // buttonReloadConfig
             // 
-            this.buttonReloadConfig.Location = new System.Drawing.Point(393, 542);
+            this.buttonReloadConfig.Location = new System.Drawing.Point(375, 579);
             this.buttonReloadConfig.Name = "buttonReloadConfig";
             this.buttonReloadConfig.Size = new System.Drawing.Size(90, 23);
             this.buttonReloadConfig.TabIndex = 2;
@@ -124,7 +129,7 @@
             // 
             // buttonDefaulValues
             // 
-            this.buttonDefaulValues.Location = new System.Drawing.Point(27, 579);
+            this.buttonDefaulValues.Location = new System.Drawing.Point(20, 577);
             this.buttonDefaulValues.Name = "buttonDefaulValues";
             this.buttonDefaulValues.Size = new System.Drawing.Size(95, 23);
             this.buttonDefaulValues.TabIndex = 2;
@@ -134,7 +139,7 @@
             // 
             // buttonOptimumValues
             // 
-            this.buttonOptimumValues.Location = new System.Drawing.Point(135, 579);
+            this.buttonOptimumValues.Location = new System.Drawing.Point(128, 577);
             this.buttonOptimumValues.Name = "buttonOptimumValues";
             this.buttonOptimumValues.Size = new System.Drawing.Size(95, 23);
             this.buttonOptimumValues.TabIndex = 2;
@@ -144,7 +149,7 @@
             // 
             // buttonExtremeValues
             // 
-            this.buttonExtremeValues.Location = new System.Drawing.Point(243, 579);
+            this.buttonExtremeValues.Location = new System.Drawing.Point(236, 577);
             this.buttonExtremeValues.Name = "buttonExtremeValues";
             this.buttonExtremeValues.Size = new System.Drawing.Size(95, 23);
             this.buttonExtremeValues.TabIndex = 2;
@@ -167,7 +172,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.textBox_id);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(31, 105);
+            this.groupBox1.Location = new System.Drawing.Point(12, 84);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(308, 206);
             this.groupBox1.TabIndex = 15;
@@ -291,7 +296,7 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBoxMsServerWebApiAddress);
             this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(352, 105);
+            this.groupBox2.Location = new System.Drawing.Point(333, 84);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(309, 136);
             this.groupBox2.TabIndex = 16;
@@ -367,7 +372,7 @@
             this.groupBox3.Controls.Add(this.textBoxChunkFileReadBuffer);
             this.groupBox3.Controls.Add(this.textBoxMediaFileWriteBuffer);
             this.groupBox3.Controls.Add(this.textBoxMediaFileReadBuffer);
-            this.groupBox3.Location = new System.Drawing.Point(345, 255);
+            this.groupBox3.Location = new System.Drawing.Point(326, 234);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(311, 146);
             this.groupBox3.TabIndex = 16;
@@ -455,7 +460,7 @@
             this.groupBox4.Controls.Add(this.label29);
             this.groupBox4.Controls.Add(this.textBoxForceDeleteLimit);
             this.groupBox4.Controls.Add(this.textBoxForceArchiveLimit);
-            this.groupBox4.Location = new System.Drawing.Point(345, 410);
+            this.groupBox4.Location = new System.Drawing.Point(326, 389);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(316, 97);
             this.groupBox4.TabIndex = 16;
@@ -513,7 +518,7 @@
             this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Controls.Add(this.textBoxDeleteThreadPoolSize);
             this.groupBox5.Controls.Add(this.label17);
-            this.groupBox5.Location = new System.Drawing.Point(27, 454);
+            this.groupBox5.Location = new System.Drawing.Point(8, 433);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(311, 119);
             this.groupBox5.TabIndex = 16;
@@ -587,7 +592,7 @@
             this.groupBox6.Controls.Add(this.textBoxMaxActiveTimeForPipeline2);
             this.groupBox6.Controls.Add(this.textBoxMaxBytesinQueue);
             this.groupBox6.Controls.Add(this.textBoxMaxFramesInQueue);
-            this.groupBox6.Location = new System.Drawing.Point(27, 326);
+            this.groupBox6.Location = new System.Drawing.Point(8, 305);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(312, 122);
             this.groupBox6.TabIndex = 16;
@@ -658,9 +663,9 @@
             this.groupBox7.Controls.Add(this.labelVersion);
             this.groupBox7.Controls.Add(this.label27);
             this.groupBox7.Controls.Add(this.label21);
-            this.groupBox7.Location = new System.Drawing.Point(31, 12);
+            this.groupBox7.Location = new System.Drawing.Point(12, 12);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(630, 87);
+            this.groupBox7.Size = new System.Drawing.Size(630, 66);
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Info";
@@ -701,11 +706,50 @@
             this.label21.TabIndex = 5;
             this.label21.Text = "Open File:";
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.button1);
+            this.groupBox8.Controls.Add(this.label10);
+            this.groupBox8.Controls.Add(this.TextBoxmaxVideoStreamsPerProxy);
+            this.groupBox8.Location = new System.Drawing.Point(326, 492);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(316, 79);
+            this.groupBox8.TabIndex = 17;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Proxy Split";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(9, 45);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(295, 21);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Help";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(8, 21);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(200, 13);
+            this.label10.TabIndex = 5;
+            this.label10.Text = "Number of Streams Before a Split Occurs";
+            // 
+            // TextBoxmaxVideoStreamsPerProxy
+            // 
+            this.TextBoxmaxVideoStreamsPerProxy.Location = new System.Drawing.Point(215, 18);
+            this.TextBoxmaxVideoStreamsPerProxy.Name = "TextBoxmaxVideoStreamsPerProxy";
+            this.TextBoxmaxVideoStreamsPerProxy.Size = new System.Drawing.Size(87, 20);
+            this.TextBoxmaxVideoStreamsPerProxy.TabIndex = 7;
+            // 
             // RecordingServerConfigV2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(669, 612);
+            this.ClientSize = new System.Drawing.Size(646, 612);
+            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
@@ -734,6 +778,8 @@
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -803,6 +849,10 @@
         private System.Windows.Forms.Button buttonPipelineSettingsHelp;
         private System.Windows.Forms.Button buttonTestManagementServer;
         private System.Windows.Forms.Button buttonTestRecordingServer;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox TextBoxmaxVideoStreamsPerProxy;
     }
 }
 

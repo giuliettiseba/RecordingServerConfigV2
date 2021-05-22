@@ -73,6 +73,15 @@ namespace RecordingServerConfigV2
             rsProps.forceArchiveLimit = xDoc.SelectSingleNode("/recorderconfig/database/database_server/disk_usage_monitor/force_archive_limit_in_mb").InnerText;
             rsProps.forceDeleteLimit= xDoc.SelectSingleNode("/recorderconfig/database/database_server/disk_usage_monitor/force_delete_limit_in_mb").InnerText;
 
+            try
+            {
+                rsProps.maxVideoStreamsPerProxy = xDoc.SelectSingleNode("/recorderconfig/recorder/proxyServerSplitting").Attributes.GetNamedItem("maxVideoStreamsPerProxy").InnerText;
+            }
+            catch (Exception e)
+            {
+                
+                rsProps.maxVideoStreamsPerProxy = "100";
+            }
 
         }
 
@@ -123,6 +132,23 @@ namespace RecordingServerConfigV2
             //Disk Usage Monitor
             xDoc.SelectSingleNode("/recorderconfig/database/database_server/disk_usage_monitor/force_archive_limit_in_mb").InnerText = rsProps.forceArchiveLimit;
             xDoc.SelectSingleNode("/recorderconfig/database/database_server/disk_usage_monitor/force_delete_limit_in_mb").InnerText = rsProps.forceDeleteLimit;
+
+
+            try
+            {
+                xDoc.SelectSingleNode("/recorderconfig/recorder/proxyServerSplitting").Attributes.GetNamedItem("maxVideoStreamsPerProxy").InnerText = rsProps.maxVideoStreamsPerProxy;
+            }
+            catch (Exception)
+            {
+                XmlNode maxVideoStreamsPerProxy_node = xDoc.CreateNode(XmlNodeType.Element, "proxyServerSplitting", null);
+                XmlAttribute attr = xDoc.CreateAttribute("maxVideoStreamsPerProxy");
+                attr.Value = rsProps.maxVideoStreamsPerProxy;
+                maxVideoStreamsPerProxy_node.Attributes.SetNamedItem(attr);
+                xDoc.SelectSingleNode("/recorderconfig/recorder").AppendChild(maxVideoStreamsPerProxy_node);
+            }
+
+
+
 
 
             try

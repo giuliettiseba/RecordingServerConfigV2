@@ -52,7 +52,10 @@ namespace RecordingServerConfigV2
         public String forceDeleteLimit { get; set; }
 
         public String forceArchiveLimit { get; set; }
-    
+
+        public String maxVideoStreamsPerProxy { get; set; }
+
+
 
     }
 }
